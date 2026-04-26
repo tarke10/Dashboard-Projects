@@ -1,0 +1,626 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  Github, Linkedin, Mail, ExternalLink, Menu, X, MapPin, 
+  Download, Terminal, Briefcase, User, ChevronRight,
+  Sun, Moon, Code, Layout, Database, Server, Smartphone, 
+  Cpu, Star, MessageSquare, ArrowUpRight, CheckCircle2
+} from 'lucide-react';
+
+// --- MOCK DATA ---
+const PERSONAL_INFO = {
+  name: "Tareq Fekry",
+  title: "Junior Data Analyst",
+  tagline: "Transforming complex data into actionable business insights.",
+  availability: "Available for new opportunities",
+  about: "Detail-oriented Data Analyst skilled in Python, SQL, and Tableau. I specialize in cleaning messy datasets, building interactive dashboards, and uncovering patterns to help organizations optimize their strategies.",
+  location: "Cairo, Egypt",
+  email: "hello@tareqfekry.com",
+  github: "https://github.com",
+  linkedin: "https://linkedin.com"
+};
+
+const STATS = [
+  { id: 1, label: "Years Experience", value: 1, suffix: "+" },
+  { id: 2, label: "Datasets Analyzed", value: 25, suffix: "+" },
+  { id: 3, label: "Dashboards Built", value: 12, suffix: "+" },
+  { id: 4, label: "Certifications", value: 3, suffix: "" },
+];
+
+const SKILLS = [
+  { category: "Data Visualization", icon: <Layout className="w-5 h-5" />, items: ["Tableau", "Power BI", "Matplotlib", "Seaborn", "Excel (Advanced)"] },
+  { category: "Data Manipulation", icon: <Database className="w-5 h-5" />, items: ["SQL (PostgreSQL, MySQL)", "Pandas", "NumPy", "Data Cleaning", "ETL Processes"] },
+  { category: "Programming & Tools", icon: <Code className="w-5 h-5" />, items: ["Python", "Jupyter Notebooks", "R", "Git", "VS Code"] },
+  { category: "Analytics & Methods", icon: <Cpu className="w-5 h-5" />, items: ["Exploratory Data Analysis", "A/B Testing", "Statistical Modeling", "Forecasting"] }
+];
+
+const PROJECTS = [
+  {
+    id: 1,
+    title: "Coffee Shop Dashboard",
+    description: "Interactive dashboard tracking daily sales, inventory, and peak hours. Cleaned and modeled data for real-time inventory management insights.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+    tags: ["Tableau", "SQL", "Excel", "Data Visualization"],
+    githubLink: "#",
+    featured: true
+  },
+  {
+    id: 2,
+    title: "CRM Dashboard",
+    description: "CRM dashboard monitoring sales pipelines and lead conversion rates. Built robust ETL pipelines to feed data into the visualization layer.",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    tags: ["Power BI", "Python", "Pandas", "Data Cleaning"],
+    githubLink: "#",
+    featured: true
+  }
+];
+
+// --- CUSTOM HOOKS ---
+
+const useScrollReveal = () => {
+  const ref = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, isVisible];
+};
+
+const AnimatedCounter = ({ value, suffix = "", duration = 2000 }) => {
+  const [count, setCount] = useState(0);
+  const [ref, isVisible] = useScrollReveal();
+
+  useEffect(() => {
+    if (!isVisible) return;
+    let startTimestamp = null;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      setCount(Math.floor(progress * value));
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        setCount(value);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }, [isVisible, value, duration]);
+
+  return <span ref={ref}>{count}{suffix}</span>;
+};
+
+// --- COMPONENTS ---
+
+const RevealSection = ({ children, className = "", delay = 0 }) => {
+  const [ref, isVisible] = useScrollReveal();
+  return (
+    <div 
+      ref={ref} 
+      className={`transition-all duration-1000 ease-out ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+      } ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+};
+
+export default function App() {
+  const [isDark, setIsDark] = useState(true); // Default to premium dark mode
+  const [activeSection, setActiveSection] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const [contactMessage, setContactMessage] = useState('');
+
+  // Inject Custom Styles
+  useEffect(() => {
+    const styleId = 'portfolio-custom-styles';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.innerHTML = `
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+          --brand-primary: #4F46E5;
+          --brand-accent: #06B6D4;
+        }
+
+        body {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          scroll-behavior: smooth;
+        }
+
+        /* Continuous text gradient animation */
+        @keyframes gradient-x {
+          0%, 100% {
+            background-size: 200% 200%;
+            background-position: left center;
+          }
+          50% {
+            background-size: 200% 200%;
+            background-position: right center;
+          }
+        }
+        
+        .animate-gradient-x {
+          animation: gradient-x 4s ease infinite;
+        }
+
+        .text-gradient {
+          background: linear-gradient(to right, #818CF8, #22D3EE);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .light .text-gradient {
+          background: linear-gradient(to right, #4F46E5, #0891B2);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .bg-grid-dark {
+          background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                            linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+          background-size: 40px 40px;
+        }
+
+        .bg-grid-light {
+          background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+                            linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+          background-size: 40px 40px;
+        }
+
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+
+        /* Glassmorphism utilities */
+        .glass-panel {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .light .glass-panel {
+          background: rgba(255, 255, 255, 0.7);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(0, 0, 0, 0.05);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    
+    // Intersection Observer for Active Nav State
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActiveSection(entry.target.id);
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('section[id]').forEach(section => observer.observe(section));
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
+  }, []);
+
+  // Theme toggle logic applied to an outer wrapper
+  const themeClass = isDark ? 'dark bg-[#050505] text-white' : 'light bg-slate-50 text-slate-900';
+
+  const navLinks = ['Home', 'About', 'Projects', 'Contact'];
+
+  return (
+    <div className={`min-h-screen transition-colors duration-500 selection:bg-indigo-500/30 ${themeClass}`}>
+      
+      {/* NAVBAR */}
+      <nav className={`fixed w-full top-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? (isDark ? 'bg-[#050505]/80 backdrop-blur-md border-b border-white/10' : 'bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm') 
+          : 'bg-transparent py-4'
+      }`}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <a href="#home" className="text-xl font-bold tracking-tight flex items-center gap-2 group">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-all">
+                {PERSONAL_INFO.name.charAt(0)}
+              </div>
+              <span>{PERSONAL_INFO.name.split(' ')[0]}</span>
+            </a>
+            
+            {/* Desktop Nav */}
+            <div className="hidden md:flex items-center space-x-8">
+              {navLinks.map((link) => (
+                <a 
+                  key={link} 
+                  href={`#${link.toLowerCase()}`}
+                  className={`text-sm font-medium transition-all hover:-translate-y-0.5 ${
+                    activeSection === link.toLowerCase() 
+                      ? 'text-indigo-500 dark:text-indigo-400' 
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  {link}
+                </a>
+              ))}
+              
+              <div className="w-px h-6 bg-slate-300 dark:bg-white/10"></div>
+              
+              <button 
+                onClick={() => setIsDark(!isDark)}
+                className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                aria-label="Toggle Theme"
+              >
+                {isDark ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+
+              <a 
+                href="#contact"
+                className="px-4 py-2 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-semibold hover:scale-105 transition-transform shadow-lg shadow-slate-900/20 dark:shadow-white/10"
+              >
+                Let's Talk
+              </a>
+            </div>
+
+            {/* Mobile Menu Toggle */}
+            <div className="md:hidden flex items-center gap-4">
+              <button onClick={() => setIsDark(!isDark)} className="p-2 text-slate-600 dark:text-slate-400">
+                {isDark ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="text-slate-600 dark:text-slate-400"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Nav */}
+        {isMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-slate-200 dark:border-white/10 p-6 flex flex-col space-y-4 shadow-xl">
+            {navLinks.map((link) => (
+              <a 
+                key={link} 
+                href={`#${link.toLowerCase()}`}
+                onClick={() => setIsMenuOpen(false)}
+                className="text-lg font-medium text-slate-600 dark:text-slate-400 hover:text-indigo-500"
+              >
+                {link}
+              </a>
+            ))}
+          </div>
+        )}
+      </nav>
+
+      <main>
+        {/* HERO SECTION */}
+        <section id="home" className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-screen flex flex-col justify-center">
+          {/* Background Elements */}
+          <div className={`absolute inset-0 z-0 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'} opacity-[0.2]`}></div>
+          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-indigo-500/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob z-0"></div>
+          <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-cyan-500/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000 z-0"></div>
+          <div className="absolute bottom-1/4 left-1/2 w-72 h-72 bg-purple-500/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000 z-0"></div>
+
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 w-full">
+            <RevealSection>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel text-sm font-medium mb-8">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="text-slate-700 dark:text-slate-300">{PERSONAL_INFO.availability}</span>
+              </div>
+            </RevealSection>
+
+            <RevealSection delay={100}>
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 max-w-4xl leading-[1.1]">
+                Hi, I'm <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-cyan-400 to-indigo-500 animate-gradient-x">{PERSONAL_INFO.name}</span>.<br />
+                <span className="text-gradient">{PERSONAL_INFO.title}</span>
+              </h1>
+            </RevealSection>
+
+            <RevealSection delay={200}>
+              <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-10 leading-relaxed font-light">
+                {PERSONAL_INFO.tagline}
+              </p>
+            </RevealSection>
+
+            <RevealSection delay={300}>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a 
+                  href="#projects" 
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold hover:scale-105 transition-all shadow-xl shadow-slate-900/20 dark:shadow-white/10 group"
+                >
+                  View Projects
+                  <ArrowUpRight className="ml-2 w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </a>
+                <a 
+                  href="#contact" 
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-xl glass-panel font-semibold hover:bg-slate-100 dark:hover:bg-white/10 transition-all text-slate-900 dark:text-white"
+                >
+                  <Mail className="mr-2 w-5 h-5" />
+                  Contact Me
+                </a>
+              </div>
+            </RevealSection>
+
+            <RevealSection delay={400} className="mt-20 pt-10 border-t border-slate-200 dark:border-white/10 flex flex-wrap gap-8 items-center text-slate-500 dark:text-slate-400 text-sm font-medium">
+              <span>Trusted by innovative teams:</span>
+              <div className="flex gap-6 grayscale opacity-60">
+                {/* Mock logos text */}
+                <span className="text-lg font-bold tracking-tighter">Stellar</span>
+                <span className="text-lg font-bold tracking-tighter">NEXUS</span>
+                <span className="text-lg font-bold tracking-tighter uppercase">LaunchPad</span>
+              </div>
+            </RevealSection>
+          </div>
+        </section>
+
+        {/* ABOUT & SKILLS SECTION */}
+        <section id="about" className="py-24 relative z-10 bg-white dark:bg-[#080808]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <RevealSection>
+              <div className="grid lg:grid-cols-2 gap-16 items-center">
+                
+                {/* Left: About Text */}
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6 flex items-center">
+                    <User className="mr-3 text-indigo-500" />
+                    About Me
+                  </h2>
+                  <div className="space-y-6 text-slate-600 dark:text-slate-400 text-lg leading-relaxed font-light">
+                    <p>{PERSONAL_INFO.about}</p>
+                    <p>
+                      When I'm not writing code, I'm writing about code. I actively contribute to open-source, mentor junior developers, and constantly explore the bleeding edge of web technologies.
+                    </p>
+                  </div>
+                  <div className="mt-8 flex gap-4">
+                    <a href={PERSONAL_INFO.github} className="p-3 rounded-full glass-panel hover:bg-slate-100 dark:hover:bg-white/10 transition-colors text-slate-700 dark:text-slate-300">
+                      <Github size={22} />
+                    </a>
+                    <a href={PERSONAL_INFO.linkedin} className="p-3 rounded-full glass-panel hover:bg-slate-100 dark:hover:bg-white/10 transition-colors text-slate-700 dark:text-slate-300">
+                      <Linkedin size={22} />
+                    </a>
+                    <button className="flex items-center gap-2 px-6 py-3 rounded-full glass-panel hover:bg-slate-100 dark:hover:bg-white/10 transition-colors font-medium text-slate-700 dark:text-slate-300">
+                      <Download size={18} />
+                      Download Resume
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right: Skills Grid */}
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {SKILLS.map((skillGroup, idx) => (
+                    <div key={idx} className="glass-panel p-6 rounded-2xl hover:-translate-y-1 transition-transform duration-300 group">
+                      <div className="w-10 h-10 rounded-lg bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        {skillGroup.icon}
+                      </div>
+                      <h3 className="font-semibold text-slate-900 dark:text-white mb-3">{skillGroup.category}</h3>
+                      <ul className="space-y-2">
+                        {skillGroup.items.map(item => (
+                          <li key={item} className="text-slate-600 dark:text-slate-400 text-sm flex items-center">
+                            <CheckCircle2 className="w-4 h-4 mr-2 text-emerald-500/70" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+            </RevealSection>
+          </div>
+        </section>
+
+        {/* STATS SECTION */}
+        <section className="py-20 border-y border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-[#050505]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+              {STATS.map((stat, idx) => (
+                <RevealSection key={stat.id} delay={idx * 100}>
+                  <div className="text-center p-6 glass-panel rounded-2xl">
+                    <div className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-2 tracking-tight">
+                      <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+                    </div>
+                    <div className="text-sm text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">
+                      {stat.label}
+                    </div>
+                  </div>
+                </RevealSection>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* PROJECTS SECTION */}
+        <section id="projects" className="py-24 bg-slate-50 dark:bg-[#050505]">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <RevealSection>
+              <div className="flex justify-between items-end mb-16">
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-4 flex items-center">
+                    <Code className="mr-3 text-indigo-500" />
+                    Selected Works
+                  </h2>
+                  <p className="text-slate-600 dark:text-slate-400 font-light max-w-xl">
+                    A collection of projects showcasing my focus on performance, robust architecture, and premium user experiences.
+                  </p>
+                </div>
+                <a href={PERSONAL_INFO.github} className="hidden sm:flex items-center text-indigo-600 dark:text-indigo-400 font-medium hover:underline">
+                  View full archive <ArrowUpRight size={18} className="ml-1" />
+                </a>
+              </div>
+            </RevealSection>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {PROJECTS.map((project, idx) => (
+                <RevealSection key={project.id} delay={idx * 100} className={idx === 0 ? "md:col-span-2" : ""}>
+                  <div className={`group relative rounded-3xl overflow-hidden glass-panel ${idx === 0 ? "md:flex" : "flex-col"}`}>
+                    
+                    {/* Project Image */}
+                    <div className={`relative overflow-hidden bg-slate-200 dark:bg-slate-800 ${idx === 0 ? "md:w-3/5 h-64 md:h-auto" : "h-64"}`}>
+                      <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors z-10 duration-500"></div>
+                      <img 
+                        src={project.image} 
+                        alt={project.title} 
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                      />
+                    </div>
+
+                    {/* Project Content */}
+                    <div className={`p-8 flex flex-col justify-center ${idx === 0 ? "md:w-2/5" : ""}`}>
+                      {project.featured && (
+                        <div className="flex items-center gap-2 text-indigo-600 dark:text-cyan-400 text-xs font-bold tracking-wider uppercase mb-3">
+                          <Star size={14} /> Featured
+                        </div>
+                      )}
+                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-slate-600 dark:text-slate-400 mb-6 font-light">
+                        {project.description}
+                      </p>
+                      
+                      <div className="flex flex-wrap gap-2 mb-8">
+                        {project.tags.map(tag => (
+                          <span key={tag} className="px-3 py-1 text-xs font-medium rounded-full bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center gap-4 mt-auto">
+                        <a href={project.githubLink} className="flex items-center text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+                          <Github size={18} className="mr-2" /> Source Code
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </RevealSection>
+              ))}
+            </div>
+            
+            <div className="mt-8 text-center sm:hidden">
+              <a href={PERSONAL_INFO.github} className="inline-flex items-center text-indigo-600 dark:text-indigo-400 font-medium">
+                View all projects on GitHub <ArrowUpRight size={18} className="ml-1" />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT SECTION */}
+        <section id="contact" className="py-24 relative overflow-hidden bg-slate-900 dark:bg-[#030303] text-white">
+          {/* Decorative background */}
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 z-0"></div>
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3 z-0"></div>
+
+          <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+            <RevealSection>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">Let's build something great.</h2>
+              <p className="text-slate-400 text-lg md:text-xl mb-12 max-w-2xl mx-auto font-light">
+                Whether you have a project in mind, need technical advisory, or just want to connect, my inbox is always open.
+              </p>
+            </RevealSection>
+
+            <RevealSection delay={200}>
+              <form 
+                onSubmit={(e) => e.preventDefault()} 
+                className="max-w-xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl text-left"
+              >
+                <div className="mb-6">
+                  <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">Name</label>
+                  <input type="text" id="name" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="John Doe" />
+                </div>
+                <div className="mb-6">
+                  <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                  <input type="email" id="email" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="john@example.com" />
+                </div>
+                <div className="mb-8">
+                  <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">Message</label>
+                  <textarea 
+                    id="message" 
+                    rows="4" 
+                    value={contactMessage}
+                    onChange={(e) => setContactMessage(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-none" 
+                    placeholder="Tell me about your project..."
+                  ></textarea>
+                </div>
+                <button type="submit" className="w-full bg-white text-slate-900 font-bold text-lg rounded-xl px-4 py-4 hover:bg-slate-200 transition-colors flex items-center justify-center">
+                  Send Message <ChevronRight size={20} className="ml-2" />
+                </button>
+              </form>
+            </RevealSection>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="py-12 bg-slate-950 text-slate-400 border-t border-white/10 text-center sm:text-left">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-6">
+          <div>
+            <div className="text-white font-bold text-xl mb-2 flex items-center justify-center sm:justify-start gap-2">
+               <div className="w-6 h-6 rounded bg-gradient-to-br from-indigo-500 to-cyan-400 text-white flex items-center justify-center text-xs">
+                {PERSONAL_INFO.name.charAt(0)}
+              </div>
+              {PERSONAL_INFO.name}
+            </div>
+            <p className="text-sm">Building digital experiences that matter.</p>
+          </div>
+          
+          <div className="flex items-center space-x-6">
+            <a href={PERSONAL_INFO.github} className="hover:text-white transition-colors"><Github size={20} /></a>
+            <a href={PERSONAL_INFO.linkedin} className="hover:text-white transition-colors"><Linkedin size={20} /></a>
+            <a href={`mailto:${PERSONAL_INFO.email}`} className="hover:text-white transition-colors"><Mail size={20} /></a>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 mt-12 pt-8 border-t border-white/5 text-sm text-center flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p>© {new Date().getFullYear()} {PERSONAL_INFO.name}. All rights reserved.</p>
+          <p className="flex items-center">
+             Designed with standard React & Tailwind
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
