@@ -1,0 +1,92 @@
+import os
+import json
+
+def read_file(path):
+    with open(path, 'r', encoding='utf-8') as f:
+        return f.read()
+
+coffee_html = """<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Coffee Shop Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.63.1/build/stlite.css" />
+  <style>
+    body, html { margin: 0; padding: 0; height: 100%; width: 100%; background-color: #0a1128; }
+    #root { height: 100%; width: 100%; }
+    .stlite-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #06b6d4; font-family: sans-serif; background-color: #0a1128;}
+    .spinner { border: 4px solid rgba(6, 182, 212, 0.2); width: 40px; height: 40px; border-radius: 50%; border-left-color: #06b6d4; animation: spin 1s linear infinite; margin-bottom: 20px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div class="stlite-loading">
+      <div class="spinner"></div>
+      <div>Loading Dashboard... (This may take a moment)</div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.63.1/build/stlite.js"></script>
+  <script>
+    stlite.mount(
+      {
+        requirements: ["pandas", "plotly", "openpyxl", "numpy"],
+        entrypoint: "app.py",
+        files: {
+          "app.py": """ + json.dumps(read_file(r"d:\portfoilo\coffee-shop-dashboard\app.py")) + """
+        }
+      },
+      document.getElementById("root")
+    );
+  </script>
+</body>
+</html>"""
+
+with open(r"d:\portfoilo\coffee-shop-dashboard\index.html", "w", encoding='utf-8') as f:
+    f.write(coffee_html)
+
+crm_html = """<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>CRM Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.63.1/build/stlite.css" />
+  <style>
+    body, html { margin: 0; padding: 0; height: 100%; width: 100%; background-color: #0a1128; }
+    #root { height: 100%; width: 100%; }
+    .stlite-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #06b6d4; font-family: sans-serif; background-color: #0a1128;}
+    .spinner { border: 4px solid rgba(6, 182, 212, 0.2); width: 40px; height: 40px; border-radius: 50%; border-left-color: #06b6d4; animation: spin 1s linear infinite; margin-bottom: 20px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div class="stlite-loading">
+      <div class="spinner"></div>
+      <div>Loading Dashboard... (This may take a moment)</div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.63.1/build/stlite.js"></script>
+  <script>
+    stlite.mount(
+      {
+        requirements: ["pandas", "plotly", "numpy"],
+        entrypoint: "app2.py",
+        files: {
+          "app2.py": """ + json.dumps(read_file(r"d:\portfoilo\crm-dashboard\app2.py")) + """,
+          "../sales_pipeline.csv": """ + json.dumps(read_file(r"d:\portfoilo\crm-dashboard\sales_pipeline.csv")) + """,
+          "../sales_teams.csv": """ + json.dumps(read_file(r"d:\portfoilo\crm-dashboard\sales_teams.csv")) + """,
+          "../products.csv": """ + json.dumps(read_file(r"d:\portfoilo\crm-dashboard\products.csv")) + """,
+          "../accounts.csv": """ + json.dumps(read_file(r"d:\portfoilo\crm-dashboard\accounts.csv")) + """
+        }
+      },
+      document.getElementById("root")
+    );
+  </script>
+</body>
+</html>"""
+
+with open(r"d:\portfoilo\crm-dashboard\index.html", "w", encoding='utf-8') as f:
+    f.write(crm_html)
