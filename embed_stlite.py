@@ -31,7 +31,7 @@ coffee_html = """<!DOCTYPE html>
   <script>
     stlite.mount(
       {
-        requirements: ["pandas", "plotly", "openpyxl", "numpy"],
+        requirements: ["pandas", "plotly", "numpy"],
         entrypoint: "app.py",
         files: {
           "app.py": """ + json.dumps(read_file(r"d:\portfoilo\coffee-shop-dashboard\app.py")) + """

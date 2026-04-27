@@ -14,6 +14,14 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Prefetch Heavy Dashboard Dependencies (Makes them load instantly when clicked) -->
+    <link rel="prefetch" href="https://cdn.jsdelivr.net/npm/@stlite/mountable@0.63.1/build/stlite.js" as="script">
+    <link rel="prefetch" href="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js" as="script">
+    <link rel="prefetch" href="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.asm.wasm" as="fetch" crossorigin="anonymous">
+    <link rel="prefetch" href="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.asm.js" as="script">
+    <link rel="prefetch" href="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pandas.js" as="script">
+    <link rel="prefetch" href="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/numpy.js" as="script">
+
     <script>
         tailwind.config = {
             theme: {
