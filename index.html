@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarek Fekry | Data Analyst</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            900: '#0a1128',
+                            800: '#121e3f',
+                            700: '#1c2e5c',
+                        },
+                        cyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for extra polish */
+        body {
+            background-color: #0a1128;
+            color: #e2e8f0;
+        }
+        
+        .bg-grid {
+            background-size: 40px 40px;
+        }
+
+        /* Abstract data graphic animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes pulse-glow {
+            0% { filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.2)); }
+            50% { filter: drop-shadow(0 0 25px rgba(34, 211, 238, 0.6)); }
+            100% { filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.2)); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .animate-glow {
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+
+        /* Gradient text utility */
+        .text-gradient {
+            background: linear-gradient(to right, #22d3ee, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            transform: scale(0.95) translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 120px);
+            background: #0a1128;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-500 selection:text-white relative">
+
+    <!-- Subtle Grid Background -->
+    <div class="fixed inset-0 pointer-events-none bg-grid bg-grid-pattern opacity-30 z-0"></div>
+
+    <!-- NEW: 3-Stage Data Particles Background (Fixed to track scroll everywhere) -->
+    <div id="data-particles-container" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- Sticky Navigation -->
+    <nav class="fixed w-full z-50 top-0 bg-navy-900/80 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#home" class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-6 h-6 text-cyan-400"></i>
+                Tarek Fekry
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex gap-8 text-sm font-medium text-slate-300">
+                <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
+                <a href="#skills" class="hover:text-cyan-400 transition-colors">Skills</a>
+                <a href="#projects" class="hover:text-cyan-400 transition-colors">Projects</a>
+                <a href="#experience" class="hover:text-cyan-400 transition-colors">Experience</a>
+                <a href="#contact" class="hover:text-cyan-400 transition-colors">Contact</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-slate-300 hover:text-white">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="relative z-10">
+
+        <!-- HERO SECTION -->
+        <section id="home" class="min-h-screen flex items-center pt-20 relative overflow-hidden">
+            <div class="max-w-6xl mx-auto px-6 w-full grid md:grid-cols-2 gap-12 items-center relative z-10">
+                
+                <!-- Left: Text -->
+                <div class="space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                        </span>
+                        Available for new opportunities
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-7xl font-bold text-white leading-tight">
+                        Hi, I'm <br>
+                        <span class="text-gradient">Tarek Fekry</span>
+                    </h1>
+                    
+                    <p class="text-xl text-slate-400 max-w-lg leading-relaxed">
+                        A passionate <strong class="text-slate-200 font-semibold">Data Analyst</strong> translating raw data into actionable insights, clear stories, and strategic value.
+                    </p>
+                    
+                    <div class="pt-4 flex gap-4">
+                        <a href="#projects" class="px-6 py-3 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-navy-900 font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25 flex items-center gap-2">
+                            View Projects
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#contact" class="px-6 py-3 rounded-lg bg-navy-800 hover:bg-navy-700 text-white font-medium border border-white/10 transition-all duration-300">
+                            Contact Me
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Abstract Data Graphic (SVG) -->
+                <div class="hidden md:flex justify-center items-center w-full relative" id="hero-interactive-area">
+                    <div class="relative w-full max-w-md animate-float animate-glow" id="interactive-svg-container">
+                        <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto drop-shadow-2xl overflow-visible">
+                            <!-- Background Triangle -->
+                            <g class="interactive-layer" data-speed="-0.02">
+                                <path d="M200 100 L300 250 L100 250 Z" stroke="#1c2e5c" stroke-width="2" stroke-linejoin="round"/>
+                            </g>
+                            
+                            <!-- Connecting lines -->
+                            <g class="interactive-layer" data-speed="0.03">
+                                <path d="M200 100 L250 200 L150 200 Z" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round" class="opacity-50"/>
+                                <line x1="200" y1="100" x2="100" y2="250" stroke="#22d3ee" stroke-width="2" stroke-dasharray="4 4" class="opacity-60"/>
+                                <line x1="200" y1="100" x2="300" y2="250" stroke="#22d3ee" stroke-width="2" stroke-dasharray="4 4" class="opacity-60"/>
+                                <line x1="100" y1="250" x2="300" y2="250" stroke="#3b82f6" stroke-width="3" class="opacity-80"/>
+                            </g>
+                            
+                            <!-- Interactive Nodes -->
+                            <g class="interactive-layer" data-speed="0.06">
+                                <circle cx="200" cy="100" r="12" fill="#06b6d4" class="cursor-pointer hover:scale-[1.5] hover:fill-[#fff] transition-all duration-300" style="transform-origin: 200px 100px;"/>
+                                <circle cx="300" cy="250" r="16" fill="#3b82f6" class="cursor-pointer hover:scale-[1.5] hover:fill-[#fff] transition-all duration-300" style="transform-origin: 300px 250px;"/>
+                                <circle cx="100" cy="250" r="14" fill="#22d3ee" class="cursor-pointer hover:scale-[1.5] hover:fill-[#fff] transition-all duration-300" style="transform-origin: 100px 250px;"/>
+                                <circle cx="250" cy="200" r="8" fill="#ffffff" class="opacity-80 cursor-pointer hover:scale-[1.8] hover:opacity-100 transition-all duration-300" style="transform-origin: 250px 200px;"/>
+                                <circle cx="150" cy="200" r="6" fill="#ffffff" class="opacity-80 cursor-pointer hover:scale-[1.8] hover:opacity-100 transition-all duration-300" style="transform-origin: 150px 200px;"/>
+                                <circle cx="200" cy="220" r="10" fill="#06b6d4" class="cursor-pointer hover:scale-[1.5] hover:fill-[#fff] transition-all duration-300" style="transform-origin: 200px 220px;"/>
+                            </g>
+
+                            <!-- Interactive Floating data bars -->
+                            <g class="interactive-layer" data-speed="0.10">
+                                <rect x="185" y="160" width="10" height="40" rx="2" fill="#06b6d4" opacity="0.8" class="cursor-pointer hover:opacity-100 hover:scale-y-[1.4] hover:fill-[#fff] transition-all duration-300" style="transform-origin: center 200px;"/>
+                                <rect x="205" y="140" width="10" height="60" rx="2" fill="#3b82f6" opacity="0.8" class="cursor-pointer hover:opacity-100 hover:scale-y-[1.2] hover:fill-[#fff] transition-all duration-300" style="transform-origin: center 200px;"/>
+                                <rect x="165" y="170" width="10" height="30" rx="2" fill="#22d3ee" opacity="0.8" class="cursor-pointer hover:opacity-100 hover:scale-y-[1.6] hover:fill-[#fff] transition-all duration-300" style="transform-origin: center 200px;"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Separator -->
+        <div class="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="py-24 relative z-10">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    
+                    <!-- Left: Text -->
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4 mb-8">
+                            <h2 class="text-3xl font-bold text-white">About Me</h2>
+                            <div class="h-px bg-white/20 flex-grow"></div>
+                        </div>
+                        <p class="text-slate-400 leading-relaxed text-lg relative">
+                            I am a detail-oriented Data Analyst with a knack for identifying trends and building scalable reporting solutions. My background combines strong analytical thinking with technical proficiency, allowing me to bridge the gap between complex datasets and strategic business decisions.
+                        </p>
+                        <p class="text-slate-400 leading-relaxed text-lg relative">
+                            When I'm not writing SQL queries or building dashboards, I'm usually exploring new data visualization trends or refining my Python automation scripts.
+                        </p>
+                    </div>
+
+                    <!-- Right: Stats -->
+                    <div class="grid grid-cols-2 gap-6 relative">
+                        <div class="bg-navy-800/80 backdrop-blur-sm border border-white/5 p-6 rounded-2xl flex flex-col items-center justify-center text-center space-y-3 hover:border-cyan-500/30 transition-colors duration-300">
+                            <div class="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center text-cyan-400 mb-2">
+                                <i data-lucide="clock" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-3xl font-bold text-white">1 Year</h3>
+                            <p class="text-sm text-slate-400 font-medium uppercase tracking-wider">Experience</p>
+                        </div>
+                        
+                        <div class="bg-navy-800/80 backdrop-blur-sm border border-white/5 p-6 rounded-2xl flex flex-col items-center justify-center text-center space-y-3 hover:border-cyan-500/30 transition-colors duration-300">
+                            <div class="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 mb-2">
+                                <i data-lucide="folder-check" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-3xl font-bold text-white">2</h3>
+                            <p class="text-sm text-slate-400 font-medium uppercase tracking-wider">Projects</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS & TOOLS SECTION -->
+        <section id="skills" class="py-24 bg-navy-800/80 backdrop-blur-md relative z-10 border-t border-white/5">
+            <div class="max-w-6xl mx-auto px-6">
+                
+                <div class="flex items-center gap-4 mb-12">
+                    <h2 class="text-3xl font-bold text-white">Core Skills</h2>
+                    <div class="h-px bg-white/20 flex-grow"></div>
+                </div>
+
+                <!-- Core 4 Skills Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                    
+                    <!-- Python Card -->
+                    <div class="group bg-navy-800 border border-white/5 rounded-2xl p-8 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300">
+                        <div class="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="terminal-square" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Python</h3>
+                        <p class="text-slate-400 text-sm">Pandas, NumPy, Matplotlib, Data Cleaning & Automation.</p>
+                    </div>
+
+                    <!-- SQL Card -->
+                    <div class="group bg-navy-800 border border-white/5 rounded-2xl p-8 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300">
+                        <div class="w-14 h-14 bg-cyan-500/10 rounded-xl flex items-center justify-center text-cyan-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="database" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">SQL</h3>
+                        <p class="text-slate-400 text-sm">Complex queries, Joins, Window Functions, PostgreSQL, MySQL.</p>
+                    </div>
+
+                    <!-- Excel Card -->
+                    <div class="group bg-navy-800 border border-white/5 rounded-2xl p-8 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300">
+                        <div class="w-14 h-14 bg-green-500/10 rounded-xl flex items-center justify-center text-green-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="table-2" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Excel</h3>
+                        <p class="text-slate-400 text-sm">Advanced Formulas, Pivot Tables, Power Query, Macros.</p>
+                    </div>
+
+                    <!-- Power BI Card -->
+                    <div class="group bg-navy-800 border border-white/5 rounded-2xl p-8 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/10 hover:border-cyan-500/30 transition-all duration-300">
+                        <div class="w-14 h-14 bg-yellow-500/10 rounded-xl flex items-center justify-center text-yellow-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="pie-chart" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Power BI</h3>
+                        <p class="text-slate-400 text-sm">Interactive Dashboards, DAX, Data Modeling, Reporting.</p>
+                    </div>
+
+                </div>
+
+                <!-- Tools Badges -->
+                <div id="tools" class="flex flex-col items-center">
+                    <p class="text-sm text-slate-400 font-medium uppercase tracking-widest mb-6">Additional Tools & Tech</p>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:border-cyan-500/50 transition-colors cursor-default">Tableau</span>
+                        <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:border-cyan-500/50 transition-colors cursor-default">Jupyter</span>
+                        <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:border-cyan-500/50 transition-colors cursor-default">Git & GitHub</span>
+                        <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:border-cyan-500/50 transition-colors cursor-default">Statistics</span>
+                        <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:border-cyan-500/50 transition-colors cursor-default">Google Analytics</span>
+                        <span class="px-4 py-2 bg-navy-800 border border-white/10 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:border-cyan-500/50 transition-colors cursor-default">Data Storytelling</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="py-24 relative z-10 bg-navy-900">
+            <div class="max-w-6xl mx-auto px-6">
+                
+                <div class="flex items-center gap-4 mb-12">
+                    <h2 class="text-3xl font-bold text-white">Featured Projects</h2>
+                    <div class="h-px bg-white/20 flex-grow"></div>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Project 1: Coffee Shop Dashboard -->
+                    <div class="bg-navy-800 rounded-2xl overflow-hidden border border-white/5 hover:border-cyan-500/30 hover:-translate-y-2 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-300 flex flex-col group">
+                        <!-- High Quality Thumbnail -->
+                        <div class="h-48 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=800" alt="Coffee Shop Analytics" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-navy-900/40 group-hover:bg-navy-900/10 transition-colors duration-500"></div>
+                        </div>
+                        <div class="p-8 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-white mb-3">Coffee Shop Dashboard</h3>
+                            <p class="text-slate-400 text-sm mb-6 flex-grow">Developed an interactive dashboard analyzing daily transaction data to identify peak sales hours, popular menu items, and optimize supply chain inventory for a local coffee shop.</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-cyan-500/10 text-cyan-400 rounded">Power BI</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-cyan-500/10 text-cyan-400 rounded">SQL</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-cyan-500/10 text-cyan-400 rounded">Excel</span>
+                            </div>
+                            
+                            <!-- Updated Link for Coffee Shop Dashboard to open in modal -->
+                            <button onclick="openModal('./coffee-shop-dashboard/index.html', 'Coffee Shop Dashboard')" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-cyan-400 transition-colors mt-auto cursor-pointer">
+                                View More 
+                                <i data-lucide="eye" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: CRM Dashboard -->
+                    <div class="bg-navy-800 rounded-2xl overflow-hidden border border-white/5 hover:border-blue-500/30 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 flex flex-col group">
+                        <!-- High Quality Thumbnail -->
+                        <div class="h-48 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" alt="CRM Dashboard Data" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-navy-900/40 group-hover:bg-navy-900/10 transition-colors duration-500"></div>
+                        </div>
+                        <div class="p-8 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-white mb-3">CRM Dashboard</h3>
+                            <p class="text-slate-400 text-sm mb-6 flex-grow">Built a comprehensive Customer Relationship Management (CRM) analytics tool tracking retention rates, sales funnel conversions, and lifetime value across diverse user segments.</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded">Tableau</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded">Python</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded">Pandas</span>
+                            </div>
+                            
+                            <!-- Updated Link for CRM Dashboard to open in modal -->
+                            <button onclick="openModal('./crm-dashboard/index.html', 'CRM Dashboard')" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-blue-400 transition-colors mt-auto cursor-pointer">
+                                View More 
+                                <i data-lucide="eye" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: Automated Data Pipeline -->
+                    <div class="bg-navy-800 rounded-2xl overflow-hidden border border-white/5 hover:border-purple-500/30 hover:-translate-y-2 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300 flex flex-col md:col-span-2 lg:col-span-1 group">
+                        <!-- High Quality Thumbnail -->
+                        <div class="h-48 relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800" alt="Data Pipeline Code" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-navy-900/40 group-hover:bg-navy-900/10 transition-colors duration-500"></div>
+                        </div>
+                        <div class="p-8 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-white mb-3">Automated Data Pipeline</h3>
+                            <p class="text-slate-400 text-sm mb-6 flex-grow">Designed a streamlined ETL pipeline that automatically extracts daily metrics from multiple APIs, cleans the data, and loads it into a centralized SQL database for reporting.</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-purple-500/10 text-purple-400 rounded">SQL</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-purple-500/10 text-purple-400 rounded">Python API</span>
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-purple-500/10 text-purple-400 rounded">Cron</span>
+                            </div>
+                            
+                            <a href="#" class="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-purple-400 transition-colors mt-auto">
+                                View Project 
+                                <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE SECTION -->
+        <section id="experience" class="py-24 bg-navy-800/80 backdrop-blur-md relative z-10 border-t border-white/5">
+            <div class="max-w-4xl mx-auto px-6">
+                
+                <div class="flex items-center gap-4 mb-16 text-center justify-center">
+                    <div class="h-px bg-white/20 w-12 md:w-24"></div>
+                    <h2 class="text-3xl font-bold text-white">Experience</h2>
+                    <div class="h-px bg-white/20 w-12 md:w-24"></div>
+                </div>
+
+                <!-- Clean Timeline Block -->
+                <div class="relative border-l border-white/10 ml-4 md:ml-0 md:pl-8 space-y-12">
+                    
+                    <!-- Single Experience Item -->
+                    <div class="relative pl-8 md:pl-0">
+                        <!-- Timeline Dot -->
+                        <div class="absolute -left-[41px] md:-left-[41px] top-1.5 w-5 h-5 rounded-full bg-navy-900 border-2 border-cyan-400 z-10"></div>
+                        
+                        <div class="bg-navy-800 border border-white/5 p-8 rounded-2xl hover:border-white/10 transition-colors">
+                            <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-4 gap-2">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white">Data Analyst</h3>
+                                    <p class="text-lg text-cyan-400 font-medium">Tech Solutions Inc.</p>
+                                </div>
+                                <span class="inline-block px-3 py-1 bg-white/5 rounded-full text-sm text-slate-300 font-medium whitespace-nowrap">
+                                    2023 - Present
+                                </span>
+                            </div>
+                            
+                            <ul class="space-y-3 text-slate-400 text-sm mt-6">
+                                <li class="flex gap-3">
+                                    <i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-500 flex-shrink-0"></i>
+                                    <span>Analyzed operational datasets containing over 1 million rows using SQL and Python to identify bottlenecks.</span>
+                                </li>
+                                <li class="flex gap-3">
+                                    <i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-500 flex-shrink-0"></i>
+                                    <span>Designed and maintained interactive Power BI dashboards utilized by C-level executives for weekly reporting.</span>
+                                </li>
+                                <li class="flex gap-3">
+                                    <i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-500 flex-shrink-0"></i>
+                                    <span>Collaborated with cross-functional teams to clean historical data, improving overall data accuracy by 20%.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <footer id="contact" class="py-24 border-t border-white/10 relative overflow-hidden bg-navy-900 relative z-10">
+            <!-- Background glow effect -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/20 blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+            <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+                <h2 class="text-4xl font-bold text-white mb-6">Let's work together</h2>
+                <p class="text-slate-400 text-lg mb-10 max-w-xl mx-auto">
+                    I'm currently open to new opportunities and collaborations. Whether you have a question about my work or just want to connect, my inbox is always open.
+                </p>
+                
+                <a href="mailto:hello@example.com" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-cyan-500 hover:bg-cyan-400 text-navy-900 font-bold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25 mb-16">
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                    Say Hello
+                </a>
+
+                <!-- Social Links -->
+                <div class="flex justify-center gap-6">
+                    <a href="#" class="w-12 h-12 rounded-full bg-navy-800 border border-white/10 flex items-center justify-center text-slate-300 hover:text-cyan-400 hover:border-cyan-400/50 hover:-translate-y-1 transition-all duration-300" aria-label="LinkedIn">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-navy-800 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:border-white/50 hover:-translate-y-1 transition-all duration-300" aria-label="GitHub">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-navy-800 border border-white/10 flex items-center justify-center text-slate-300 hover:text-blue-400 hover:border-blue-400/50 hover:-translate-y-1 transition-all duration-300" aria-label="Twitter">
+                        <i data-lucide="twitter" class="w-5 h-5"></i>
+                    </a>
+                </div>
+                
+                <p class="mt-16 text-sm text-slate-500">
+                    &copy; 2024 Tarek Fekry. Designed & Built with precision.
+                </p>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Modal Container -->
+    <div id="project-modal" class="fixed inset-0 z-[100] flex items-center justify-center modal-overlay">
+        <div class="absolute inset-0 bg-navy-900/90 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="relative w-full max-w-6xl mx-auto p-4 z-10 modal-content">
+            <div class="bg-navy-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden flex flex-col">
+                <div class="p-4 border-b border-white/10 flex justify-between items-center bg-navy-900">
+                    <h3 id="modal-title" class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="activity" class="w-5 h-5 text-cyan-400"></i>
+                        Project Preview
+                    </h3>
+                    <div class="flex items-center gap-4">
+                        <a id="modal-fallback-link" href="#" target="_blank" class="flex items-center gap-2 text-sm font-bold text-navy-900 bg-cyan-500 hover:bg-cyan-400 transition-colors px-4 py-2 rounded-lg shadow-lg shadow-cyan-500/20">
+                            Open Dashboard in New Tab
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                        <button onclick="closeModal()" class="text-slate-400 hover:text-white transition-colors p-1 rounded hover:bg-white/10">
+                            <i data-lucide="x" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- File Protocol Warning Banner -->
+                <div id="file-protocol-warning" class="hidden bg-amber-500/10 border-b border-amber-500/20 p-3 px-4 flex items-start gap-3 text-amber-200/90 text-sm">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5"></i>
+                    <div>
+                        <strong class="text-amber-500 font-semibold block mb-0.5">Local File Restriction Detected</strong>
+                        You are viewing this site using a <code>file:///</code> URL. Browsers block iframes from loading local files for security reasons (CORS). 
+                        To view the dashboard, click the <strong>"Open Dashboard in New Tab"</strong> button above, or run a local server (e.g., <code>python -m http.server</code>).
+                    </div>
+                </div>
+
+                <div class="p-2 iframe-container relative">
+                    <!-- Added sandbox attribute to allow scripts and same-origin access -->
+                    <iframe id="modal-iframe" src="about:blank" title="Project Dashboard" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+        
+        // Modal functionality
+        function openModal(url, title) {
+            document.getElementById('modal-title').innerHTML = `<i data-lucide="activity" class="w-5 h-5 text-cyan-400"></i> ${title}`;
+            
+            // Set the fallback link URL
+            document.getElementById('modal-fallback-link').href = url;
+            
+            // Show file protocol warning if needed
+            if (window.location.protocol === 'file:') {
+                document.getElementById('file-protocol-warning').classList.remove('hidden');
+            } else {
+                document.getElementById('file-protocol-warning').classList.add('hidden');
+            }
+
+            lucide.createIcons(); // re-init icons for dynamic content
+            document.getElementById('modal-iframe').src = url;
+            document.getElementById('project-modal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal() {
+            document.getElementById('project-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            // Clear iframe src after transition to stop background processes if any
+            setTimeout(() => {
+                document.getElementById('modal-iframe').src = 'about:blank';
+            }, 300);
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && document.getElementById('project-modal').classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Interactive Hero Graphic Parallax Effect
+        const heroArea = document.getElementById('hero-interactive-area');
+        const layers = document.querySelectorAll('.interactive-layer');
+
+        if(heroArea && layers.length > 0) {
+            heroArea.addEventListener('mousemove', (e) => {
+                const rect = heroArea.getBoundingClientRect();
+                const x = e.clientX - rect.left - (rect.width / 2);
+                const y = e.clientY - rect.top - (rect.height / 2);
+
+                layers.forEach(layer => {
+                    layer.style.transition = 'none'; 
+                    const speed = parseFloat(layer.getAttribute('data-speed'));
+                    const xOffset = x * speed;
+                    const yOffset = y * speed;
+                    layer.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+                });
+            });
+
+            heroArea.addEventListener('mouseleave', () => {
+                layers.forEach(layer => {
+                    layer.style.transition = 'transform 0.5s ease-out';
+                    layer.style.transform = `translate(0px, 0px)`;
+                });
+            });
+        }
+
+        // --- UPGRADED: Messy -> Clean -> Visualization Scroll Effect ---
+        const dataContainer = document.getElementById('data-particles-container');
+        const particles = [];
+        const numParticles = 60; // Number of floating data points
+        // The messy errors
+        const messyTexts = ['{"id":NaN}', 'NULL', 'value_error', '#DIV/0!', 'missing_data', 'undefined', '1970-01-01', '???', '!@#', 'ERROR_500'];
+        // The cleaned outputs
+        const cleanTexts = ['{"id": 1}', '100.0%', 'cleaned', '0.998', 'valid', 'not_null', '2024-04-23', 'TRUE', 'verified', 'OK_200'];
+
+        if(dataContainer) {
+            // Generate the particle elements and calculate their 3 states
+            for (let i = 0; i < numParticles; i++) {
+                const el = document.createElement('div');
+                el.className = 'absolute text-[10px] md:text-xs font-mono font-bold opacity-0 transition-colors duration-300 whitespace-nowrap';
+                dataContainer.appendChild(el);
+
+                // STATE 1: Chaos (Random positions and rotations)
+                const s1X = (Math.random() * 120) - 10; 
+                const s1Y = (Math.random() * 120) - 10; 
+                const s1Rot = (Math.random() - 0.5) * 720; 
+
+                // STATE 2: Clean Grid (Structured rows and columns)
+                const cols = Math.floor(window.innerWidth > 768 ? 12 : 6);
+                const col = i % cols;
+                const row = Math.floor(i / cols);
+                const s2X = 5 + (col * (90 / cols)); 
+                const s2Y = 15 + (row * 8); 
+
+                // STATE 3: Visualization (Normal Distribution / Bell Curve Plot)
+                const s3X = 10 + (i / (numParticles - 1)) * 80; // Spread from 10% to 90% width
+                const nx = (i / (numParticles - 1)) * 5 - 2.5; // Normalized x from -2.5 to 2.5
+                const s3Y = 75 - Math.exp(-(nx * nx / 2)) * 45; // Bell curve shape
+
+                particles.push({
+                    el,
+                    s1X, s1Y, s1Rot,
+                    s2X, s2Y,
+                    s3X, s3Y,
+                    messyText: messyTexts[Math.floor(Math.random() * messyTexts.length)],
+                    cleanText: cleanTexts[Math.floor(Math.random() * cleanTexts.length)]
+                });
+            }
+            
+            function updateParticles() {
+                const scrollY = window.scrollY;
+                
+                // Phase 1 (0-200px): Messy to Grid
+                let phase1Progress = Math.max(0, Math.min(1, scrollY / 200));
+                // Phase 2 (200-400px): Grid to Plot
+                let phase2Progress = Math.max(0, Math.min(1, (scrollY - 200) / 200));
+
+                // Smooth easing functions
+                const ease1 = phase1Progress < 0.5 ? 2 * phase1Progress * phase1Progress : -1 + (4 - 2 * phase1Progress) * phase1Progress;
+                const ease2 = phase2Progress < 0.5 ? 2 * phase2Progress * phase2Progress : -1 + (4 - 2 * phase2Progress) * phase2Progress;
+
+                // Global opacity (Fade in early, vanish completely before "About Me" section)
+                let globalOpacity = 0;
+                if (scrollY < 50) globalOpacity = scrollY / 50 * 0.3; // Fade in
+                else if (scrollY < 300) globalOpacity = 0.3; // Hold visibility
+                else if (scrollY < 550) globalOpacity = Math.max(0, 0.3 - ((scrollY - 300) / 250 * 0.3)); // Fade out and vanish completely by 550px
+                else globalOpacity = 0; // Ensure it vanishes completely
+
+                particles.forEach(p => {
+                    let x, y, rot;
+                    
+                    if (scrollY <= 200) {
+                        // Interpolate State 1 -> State 2
+                        x = p.s1X + (p.s2X - p.s1X) * ease1;
+                        y = p.s1Y + (p.s2Y - p.s1Y) * ease1;
+                        rot = p.s1Rot * (1 - ease1);
+                        
+                        p.el.textContent = ease1 > 0.5 ? p.cleanText : p.messyText;
+                        p.el.className = `absolute text-[10px] md:text-xs font-mono font-bold whitespace-nowrap transition-colors duration-300 ${ease1 > 0.5 ? 'text-cyan-500' : 'text-red-500'}`;
+                    } else {
+                        // Interpolate State 2 -> State 3
+                        x = p.s2X + (p.s3X - p.s2X) * ease2;
+                        y = p.s2Y + (p.s3Y - p.s2Y) * ease2;
+                        rot = 0;
+                        
+                        p.el.textContent = p.cleanText;
+                        // Change color to deeper blue when forming the chart
+                        p.el.className = `absolute text-[10px] md:text-xs font-mono font-bold whitespace-nowrap transition-colors duration-300 ${ease2 > 0.5 ? 'text-blue-400' : 'text-cyan-500'}`;
+                    }
+
+                    p.el.style.left = `${x}%`;
+                    p.el.style.top = `${y}%`;
+                    p.el.style.transform = `rotate(${rot}deg)`;
+                    p.el.style.opacity = globalOpacity;
+                });
+
+                requestAnimationFrame(updateParticles);
+            }
+            
+            updateParticles();
+        }
+    </script>
+</body>
+</html>
